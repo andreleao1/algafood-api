@@ -1,5 +1,6 @@
 package com.algaworks.algafood.domain.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,11 @@ import com.algaworks.algafood.domain.repository.RestauranteRepository;
 @Service
 public class RestauranteService {
 
-	private static final String MENSAGEM_ENTIDADE_NAO_ENCONTRADA = "Não foi possível encontrar uma cozinha com id %d";
+	private static final String MENSAGEM_ENTIDADE_NAO_ENCONTRADA = "Não foi possível encontrar registro(s) de restaurante(s) com %s %d";
 
+	private static final String MENSAGEM_RESTAURANTE_NAO_ENCONTRADO_PELA_TAXA_FRETE = "Não foi possível encontrar registro(s) de restaurante(s) com a taxa frete entre %d e %d.";
+
+	private static final String MENSAGEM_ENTIDADE_NAO_ENCONTRADA_PELO_NOME_OU_PELO_NOME_DA_COZINHA = "Não foi possível encontrar registro(s) de restaurante(s) pelo nome %s nem pela cozinha %s.";
 	@Autowired
 	private RestauranteRepository restauranteRepository;
 
@@ -26,8 +30,26 @@ public class RestauranteService {
 	public Restaurante buscar(long restauranteId) {
 		Restaurante restaurante = this.restauranteRepository.findById(restauranteId)
 				.orElseThrow(() -> new EntidadeNaoEncontradaException(
-						String.format(MENSAGEM_ENTIDADE_NAO_ENCONTRADA, restauranteId)));
+						String.format(MENSAGEM_ENTIDADE_NAO_ENCONTRADA, "id", restauranteId)));
 		return restaurante;
+	}
+
+	public List<Restaurante> buscarPorTaxaFrete(BigDecimal taxaInicial, BigDecimal taxaFinal) {
+		List<Restaurante> restaurantesPesquisados = this.restauranteRepository
+				.findAllByTaxaFreteBetween(taxaInicial, taxaFinal).orElseThrow(() -> new EntidadeNaoEncontradaException(
+						String.format(MENSAGEM_RESTAURANTE_NAO_ENCONTRADO_PELA_TAXA_FRETE, taxaInicial, taxaFinal)));
+
+		return restaurantesPesquisados;
+	}
+	
+	public List<Restaurante> buscarPorNomeOuNomeCozinha(String nomeRestaurante, String nomeCozinha) {
+		List<Restaurante> restaurantesPesquisados = this.restauranteRepository
+				.findAllByNomeOrCozinhaNome(nomeRestaurante, nomeCozinha)
+				.orElseThrow(() -> new EntidadeNaoEncontradaException(
+						String.format(MENSAGEM_ENTIDADE_NAO_ENCONTRADA_PELO_NOME_OU_PELO_NOME_DA_COZINHA,
+								nomeRestaurante, nomeCozinha)));
+
+		return restaurantesPesquisados;
 	}
 
 	public Restaurante salvar(Restaurante restaurante) {

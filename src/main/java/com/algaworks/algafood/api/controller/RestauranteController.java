@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,6 +39,29 @@ public class RestauranteController {
 		if (Objects.nonNull(restaurantePesquisado)) {
 			return ResponseEntity.ok(restaurantePesquisado);
 		}
+		return ResponseEntity.notFound().build();
+	}
+	
+	@GetMapping("/buscar-por-taxa-frete")
+	public ResponseEntity<List<Restaurante>> buscarPorTaxaFrete(BigDecimal taxaInicial, BigDecimal taxaFinal) {
+		List<Restaurante> restaurantesPesquisados = this.restauranteService.buscarPorTaxaFrete(taxaInicial, taxaFinal);
+
+		if (Objects.nonNull(restaurantesPesquisados)) {
+			return ResponseEntity.ok(restaurantesPesquisados);
+		}
+
+		return ResponseEntity.notFound().build();
+	}
+	
+	@GetMapping("/buscar-por-nome-ou-nome-cozinha")
+	public ResponseEntity<List<Restaurante>> buscarPorNomeOuNomeCozinha(String nomeRestaurante, String nomeCozinha) {
+		List<Restaurante> restaurantesPesquisados = this.restauranteService.buscarPorNomeOuNomeCozinha(nomeRestaurante,
+				nomeCozinha);
+
+		if (Objects.nonNull(restaurantesPesquisados)) {
+			return ResponseEntity.ok(restaurantesPesquisados);
+		}
+
 		return ResponseEntity.notFound().build();
 	}
 

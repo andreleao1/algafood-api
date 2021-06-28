@@ -14,7 +14,7 @@ import com.algaworks.algafood.domain.repository.CozinhaRepository;
 @Service
 public class CozinhaService {
 
-	private static final String MENSAGEM_ENTIDADE_NAO_ENCONTRADA = "Não foi possível encontrar uma cozinha com id %d";
+	private static final String MENSAGEM_ENTIDADE_NAO_ENCONTRADA = "Não foi possível encontrar registro(s) de cozinha(s) com %s %d";
 
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
@@ -24,9 +24,16 @@ public class CozinhaService {
 	}
 
 	public Cozinha buscar(long cozinhaId) {
-		Cozinha cozinha = this.cozinhaRepository.findById(cozinhaId).orElseThrow(
-				() -> new EntidadeNaoEncontradaException(String.format(MENSAGEM_ENTIDADE_NAO_ENCONTRADA, cozinhaId)));
+		Cozinha cozinha = this.cozinhaRepository.findById(cozinhaId)
+				.orElseThrow(() -> new EntidadeNaoEncontradaException(
+						String.format(MENSAGEM_ENTIDADE_NAO_ENCONTRADA, "id", cozinhaId)));
 		return cozinha;
+	}
+
+	public List<Cozinha> buscarPorNome(String nome) {
+		return this.cozinhaRepository.findByNomeContainingIgnoreCase(nome)
+				.orElseThrow(() -> new EntidadeNaoEncontradaException(
+						String.format(MENSAGEM_ENTIDADE_NAO_ENCONTRADA, "nome", nome)));
 	}
 
 	public Cozinha salvar(Cozinha cozinha) {
