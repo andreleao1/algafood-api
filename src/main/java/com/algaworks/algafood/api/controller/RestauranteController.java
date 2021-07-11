@@ -77,7 +77,7 @@ public class RestauranteController {
 		Restaurante restaurantePesquisado = this.restauranteService.buscar(restauranteId);
 
 		if (Objects.nonNull(restaurantePesquisado)) {
-			BeanUtils.copyProperties(restaurante, restaurantePesquisado, "id");
+			BeanUtils.copyProperties(restaurante, restaurantePesquisado, "id", "formasPagamento", "endereco", "dataCadastro");
 			this.restauranteService.salvar(restaurantePesquisado);
 			return ResponseEntity.ok(restaurantePesquisado);
 		}
