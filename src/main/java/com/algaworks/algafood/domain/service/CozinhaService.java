@@ -14,6 +14,8 @@ import com.algaworks.algafood.domain.repository.CozinhaRepository;
 @Service
 public class CozinhaService {
 
+	private static final String MENSAGEM_ENTIDADE_EM_USO = "Cozinha de código %d não pode ser removida, pois está em uso.";
+
 	private static final String MENSAGEM_ENTIDADE_NAO_ENCONTRADA = "Não foi possível encontrar registro(s) de cozinha(s) com %s %d";
 
 	@Autowired
@@ -46,7 +48,7 @@ public class CozinhaService {
 				this.cozinhaRepository.deleteById(cozinhaId);
 			} catch (DataIntegrityViolationException e) {
 				throw new EntidadeEmUsoException(
-						(String.format("Cozinha de código %d não pode ser removida, pois está em uso.", cozinhaId)));
+						(String.format(MENSAGEM_ENTIDADE_EM_USO, cozinhaId)));
 			}
 		} else {
 			throw new EntidadeNaoEncontradaException(String.format(MENSAGEM_ENTIDADE_NAO_ENCONTRADA, cozinhaId));

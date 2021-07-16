@@ -38,7 +38,7 @@ public class EstadoService {
 				this.estadoRepository.deleteById(estadoId);
 			} catch (DataIntegrityViolationException e) {
 				throw new EntidadeEmUsoException(
-						(String.format("Cozinha de código %d não pode ser removida, pois está em uso.", estadoId)));
+						(String.format("O estado de código %d não pode ser removida, pois está em uso.", estadoId)));
 			}
 		} else {
 			throw new EntidadeNaoEncontradaException(String.format(MENSAGEM_ENTIDADE_NAO_ENCONTRADA, estadoId));
