@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -66,13 +68,13 @@ public class RestauranteController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Restaurante> salvar(@RequestBody Restaurante restaurante) {
+	public ResponseEntity<Restaurante> salvar(@RequestBody @Valid Restaurante restaurante) {
 		this.restauranteService.salvar(restaurante);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
 	@PutMapping("/{restauranteId}")
-	public ResponseEntity<Restaurante> atualizar(@PathVariable long restauranteId,
+	public ResponseEntity<Restaurante> atualizar(@PathVariable @Valid long restauranteId,
 			@RequestBody Restaurante restaurante) {
 		Restaurante restaurantePesquisado = this.restauranteService.buscar(restauranteId);
 
