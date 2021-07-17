@@ -4,12 +4,11 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.Groups;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.service.RestauranteService;
 
@@ -68,13 +68,13 @@ public class RestauranteController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Restaurante> salvar(@RequestBody @Valid Restaurante restaurante) {
+	public ResponseEntity<Restaurante> salvar(@RequestBody @Validated(Groups.CadastroRestaurante.class) Restaurante restaurante) {
 		this.restauranteService.salvar(restaurante);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
 	@PutMapping("/{restauranteId}")
-	public ResponseEntity<Restaurante> atualizar(@PathVariable @Valid long restauranteId,
+	public ResponseEntity<Restaurante> atualizar(@PathVariable @Validated(Groups.CadastroRestaurante.class) long restauranteId,
 			@RequestBody Restaurante restaurante) {
 		Restaurante restaurantePesquisado = this.restauranteService.buscar(restauranteId);
 
