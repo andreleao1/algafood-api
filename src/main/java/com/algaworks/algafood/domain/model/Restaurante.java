@@ -20,6 +20,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -50,7 +52,7 @@ public class Restaurante {
 	@UpdateTimestamp
 	private LocalDateTime dataAtualizacao;
 
-	@NotBlank(groups = Groups.CadastroRestaurante.class)
+	@NotBlank
 	@Column(nullable = false)
 	private String nome;
 
@@ -59,7 +61,8 @@ public class Restaurante {
 	private BigDecimal taxaFrete;
 	
 	@Valid
-	@NotNull(groups = Groups.CadastroRestaurante.class)
+	@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "cozinha_id", nullable = false)
 	private Cozinha cozinha;
