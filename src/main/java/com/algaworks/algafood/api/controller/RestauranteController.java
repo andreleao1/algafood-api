@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.model.CozinhaDTO;
+import com.algaworks.algafood.api.model.RestauranteDTO;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.service.RestauranteService;
 
@@ -35,15 +37,16 @@ public class RestauranteController {
 	}
 
 	@GetMapping("/{restauranteId}")
-	public ResponseEntity<Restaurante> buscar(@PathVariable long restauranteId) {
+	public ResponseEntity<RestauranteDTO> buscar(@PathVariable long restauranteId) {
 		Restaurante restaurantePesquisado = this.restauranteService.buscar(restauranteId);
 
 		if (Objects.nonNull(restaurantePesquisado)) {
-			return ResponseEntity.ok(restaurantePesquisado);
+			RestauranteDTO restauranteDto = criarRestauranteDTO(restaurantePesquisado);
+			return ResponseEntity.ok(restauranteDto);
 		}
 		return ResponseEntity.notFound().build();
 	}
-	
+
 	@GetMapping("/buscar-por-taxa-frete")
 	public ResponseEntity<List<Restaurante>> buscarPorTaxaFrete(BigDecimal taxaInicial, BigDecimal taxaFinal) {
 		List<Restaurante> restaurantesPesquisados = this.restauranteService.buscarPorTaxaFrete(taxaInicial, taxaFinal);
@@ -54,7 +57,7 @@ public class RestauranteController {
 
 		return ResponseEntity.notFound().build();
 	}
-	
+
 	@GetMapping("/buscar-por-nome-ou-nome-cozinha")
 	public ResponseEntity<List<Restaurante>> buscarPorNomeOuNomeCozinha(String nomeRestaurante, String nomeCozinha) {
 		List<Restaurante> restaurantesPesquisados = this.restauranteService.buscarPorNomeOuNomeCozinha(nomeRestaurante,
@@ -79,7 +82,8 @@ public class RestauranteController {
 		Restaurante restaurantePesquisado = this.restauranteService.buscar(restauranteId);
 
 		if (Objects.nonNull(restaurantePesquisado)) {
-			BeanUtils.copyProperties(restaurante, restaurantePesquisado, "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
+			BeanUtils.copyProperties(restaurante, restaurantePesquisado, "id", "formasPagamento", "endereco",
+					"dataCadastro", "produtos");
 			this.restauranteService.salvar(restaurantePesquisado);
 			return ResponseEntity.ok(restaurantePesquisado);
 		}
@@ -91,5 +95,12 @@ public class RestauranteController {
 	public ResponseEntity<Void> remover(@PathVariable long restauranteId) {
 		this.restauranteService.excluir(restauranteId);
 		return ResponseEntity.noContent().build();
+	}
+
+	private RestauranteDTO criarRestauranteDTO(Restaurante restaurante) {
+		CozinhaDTO cozinhaDTO = new CozinhaDTO(restaurante.getCozinha().getId(), restaurante.getCozinha().getNome());
+		RestauranteDTO restauranteDTO = new RestauranteDTO(restaurante.getId(), restaurante.getNome(),
+				restaurante.getTaxaFrete(), cozinhaDTO);
+		return restauranteDTO;
 	}
 }
