@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
@@ -28,10 +29,12 @@ public class CidadeService {
 		return cidade;
 	}
 
+	@Transactional
 	public Cidade salvar(Cidade cidade) {
 		return this.cidadeRepository.save(cidade);
 	}
 
+	@Transactional
 	public void excluir(long cidadeId) {
 		if (this.cidadeRepository.existsById(cidadeId)) {
 			try {

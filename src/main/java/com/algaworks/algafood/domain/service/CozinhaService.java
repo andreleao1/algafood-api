@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
@@ -38,10 +39,12 @@ public class CozinhaService {
 						String.format(MENSAGEM_ENTIDADE_NAO_ENCONTRADA, "nome", nome)));
 	}
 
+	@Transactional
 	public Cozinha salvar(Cozinha cozinha) {
 		return this.cozinhaRepository.save(cozinha);
 	}
 
+	@Transactional
 	public void excluir(long cozinhaId) {
 		if (this.cozinhaRepository.existsById(cozinhaId)) {
 			try {
