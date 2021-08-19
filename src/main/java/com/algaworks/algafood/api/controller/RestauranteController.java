@@ -96,6 +96,19 @@ public class RestauranteController {
 		this.restauranteService.excluir(restauranteId);
 		return ResponseEntity.noContent().build();
 	}
+	
+	@PutMapping("/{restauranteId}/ativar")
+	public ResponseEntity<Void> ativarRestaurante(@PathVariable Long restauranteId) {
+		this.restauranteService.ativar(restauranteId);
+		return ResponseEntity.ok().build();
+	}
+	
+	@PutMapping("/{restauranteId}/inativar")
+	public ResponseEntity<Void> inativarRestaurante(@PathVariable Long restauranteId) {
+		this.restauranteService.inativar(restauranteId);
+		return ResponseEntity.ok().build();
+	}
+
 
 	private RestauranteDTO criarRestauranteDTO(Restaurante restaurante) {
 		CozinhaDTO cozinhaDTO = new CozinhaDTO(restaurante.getCozinha().getId(), restaurante.getCozinha().getNome());

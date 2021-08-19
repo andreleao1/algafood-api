@@ -71,4 +71,16 @@ public class RestauranteService {
 			throw new EntidadeNaoEncontradaException(String.format(MENSAGEM_ENTIDADE_NAO_ENCONTRADA, restauranteId));
 		}
 	}
+	
+	@Transactional
+	public void ativar(Long restauranteId) {
+		Restaurante restaurantePesquisado = buscar(restauranteId);
+		restaurantePesquisado.ativar();
+	}
+	
+	@Transactional
+	public void inativar(Long restauranteId) {
+		Restaurante restaurantePesquisado = buscar(restauranteId);
+		restaurantePesquisado.inativar();
+	}
 }
