@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.model.CozinhaDTO;
+import com.algaworks.algafood.api.model.EnderecoRestauranteDTO;
 import com.algaworks.algafood.api.model.RestauranteDTO;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.service.RestauranteService;
@@ -112,8 +113,17 @@ public class RestauranteController {
 
 	private RestauranteDTO criarRestauranteDTO(Restaurante restaurante) {
 		CozinhaDTO cozinhaDTO = new CozinhaDTO(restaurante.getCozinha().getId(), restaurante.getCozinha().getNome());
+		EnderecoRestauranteDTO enderecoRestauranteDTO = criarRestauranteEnderecoDTO(restaurante);
 		RestauranteDTO restauranteDTO = new RestauranteDTO(restaurante.getId(), restaurante.getNome(),
-				restaurante.getTaxaFrete(), cozinhaDTO);
+				restaurante.getTaxaFrete(), cozinhaDTO, enderecoRestauranteDTO);
 		return restauranteDTO;
+	}
+
+	private EnderecoRestauranteDTO criarRestauranteEnderecoDTO(Restaurante restaurante) {
+		return new EnderecoRestauranteDTO(restaurante.getEndereco().getCep(), restaurante.getEndereco().getLogradouro(),
+				restaurante.getEndereco().getNumero(), restaurante.getEndereco().getComplemento(),
+				restaurante.getEndereco().getBairro(), restaurante.getEndereco().getCidade().getNome(),
+				restaurante.getEndereco().getCidade().getEstado().getNome());
+
 	}
 }
