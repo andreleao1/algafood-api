@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -26,11 +28,14 @@ public class Usuario {
 	@EqualsAndHashCode.Include
 	private long id;
 
+	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
 	private LocalDateTime dataCadastro;
 
+	@Column(nullable = false)
 	private String nome;
 
+	@Column(nullable = false)
 	private String email;
 
 	private String senha;

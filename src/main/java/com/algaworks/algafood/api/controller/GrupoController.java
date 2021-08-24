@@ -52,8 +52,7 @@ public class GrupoController {
 		Grupo grupoPesquisado = this.grupoService.buscar(grupoId);
 
 		if (Objects.nonNull(grupoPesquisado)) {
-			BeanUtils.copyProperties(grupo, grupoPesquisado, "id", "formasPagamento", "endereco", "dataCadastro",
-					"produtos");
+			BeanUtils.copyProperties(grupo, grupoPesquisado, "id");
 			this.grupoService.salvar(grupoPesquisado);
 			return ResponseEntity.ok(grupoPesquisado);
 		}
