@@ -1,6 +1,7 @@
 package com.algaworks.algafood.domain.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -34,7 +35,9 @@ public class UsuarioService {
 
 	@Transactional
 	public Usuario salvar(Usuario usuario) {
-		verificarEmail(usuario.getEmail());
+		if (usuario.getId() < 0) {
+			verificarEmail(usuario.getEmail());			
+		}
 		return this.usuarioRepository.save(usuario);
 	}
 	
@@ -46,6 +49,16 @@ public class UsuarioService {
 			} catch (DataIntegrityViolationException e) {
 				throw new EntidadeEmUsoException(String.format(MSG_ENTIDADE_EM_USO, usuarioId));
 			}
+		}
+	}
+	
+	@Transactional
+	public void atualizarSenha(long usaurioId, Map<String,String> corpoRequisicao) {
+		Usuario usuarioPesquisado = buscar(usaurioId);
+		String senhaAtual = corpoRequisicao.get("senhaAtual");
+		String novaSenha = corpoRequisicao.get("novaSenha");
+		if (usuarioPesquisado.getSenha().equals(senhaAtual)) {
+			usuarioPesquisado.atualizarSenha(novaSenha);
 		}
 	}
 	

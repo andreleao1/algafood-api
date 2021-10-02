@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.algaworks.algafood.api.model.CozinhaDTO;
 import com.algaworks.algafood.api.model.EnderecoRestauranteDTO;
 import com.algaworks.algafood.api.model.RestauranteDTO;
+import com.algaworks.algafood.domain.model.FormaPagamento;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.service.RestauranteService;
 
@@ -70,6 +71,13 @@ public class RestauranteController {
 
 		return ResponseEntity.notFound().build();
 	}
+	
+	@GetMapping("/formas-pagamento/{restauranteId}")
+	public ResponseEntity<List<FormaPagamento>> listarFormasPagamento(@PathVariable long restauranteId) {
+		Restaurante restaurante = this.restauranteService.buscar(restauranteId);
+		
+		return ResponseEntity.ok(restaurante.getFormasPagamento());
+	}
 
 	@PostMapping
 	public ResponseEntity<Restaurante> salvar(@RequestBody @Valid Restaurante restaurante) {
@@ -109,7 +117,6 @@ public class RestauranteController {
 		this.restauranteService.inativar(restauranteId);
 		return ResponseEntity.ok().build();
 	}
-
 
 	private RestauranteDTO criarRestauranteDTO(Restaurante restaurante) {
 		CozinhaDTO cozinhaDTO = new CozinhaDTO(restaurante.getCozinha().getId(), restaurante.getCozinha().getNome());

@@ -1,17 +1,20 @@
 package com.algaworks.algafood.api.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,9 +60,19 @@ public class UsuarioController {
 		return ResponseEntity.badRequest().build();
 	}
 	
-//	public ResponseEntity<UsuarioDTO> atualizar(@Valid @RequestBody Usuario usaurio) {
-//		
-//	}
+	@PutMapping("/{usuarioId}")
+	public ResponseEntity<UsuarioDTO> atualizar(@PathVariable long usuarioId , @Valid @RequestBody UsuarioDTO usuarioDto) {
+		Usuario usuarioPesquisado = this.usuarioService.buscar(usuarioId);
+		BeanUtils.copyProperties(usuarioDto, usuarioPesquisado, "id");
+		this.usuarioService.salvar(usuarioPesquisado);
+		return ResponseEntity.ok().build();
+	}
+	
+	@PutMapping("/{usuarioId}/alterar-senha")
+	public ResponseEntity<Void> atualizarSenha(@PathVariable long usuarioId, @RequestBody Map<String,String> corpoRequisicao) {
+		this.usuarioService.atualizarSenha(usuarioId, corpoRequisicao);
+		return ResponseEntity.ok().build();
+	}
 
 	private UsuarioDTO parseToUsuarioDto(Usuario usuario) {
 		return new UsuarioDTO(usuario.getId(), usuario.getNome(), usuario.getEmail());

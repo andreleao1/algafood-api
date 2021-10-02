@@ -21,6 +21,7 @@ public class RestauranteService {
 	private static final String MENSAGEM_RESTAURANTE_NAO_ENCONTRADO_PELA_TAXA_FRETE = "Não foi possível encontrar registro(s) de restaurante(s) com a taxa frete entre %d e %d.";
 
 	private static final String MENSAGEM_ENTIDADE_NAO_ENCONTRADA_PELO_NOME_OU_PELO_NOME_DA_COZINHA = "Não foi possível encontrar registro(s) de restaurante(s) pelo nome %s nem pela cozinha %s.";
+	
 	@Autowired
 	private RestauranteRepository restauranteRepository;
 
@@ -28,6 +29,7 @@ public class RestauranteService {
 		return this.restauranteRepository.findAll();
 	}
 
+	@Transactional
 	public Restaurante buscar(long restauranteId) {
 		Restaurante restaurante = this.restauranteRepository.findById(restauranteId)
 				.orElseThrow(() -> new EntidadeNaoEncontradaException(
